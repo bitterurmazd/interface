@@ -1,28 +1,20 @@
-name: Build and push Docker image to dockerhub
-
+name: Publish Docker image
 on:
   push:
-    branches: [ "main" ]
-    
+    branches: ['main']
 jobs:
-
-  build:
-
+  push_to_registry:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Check out the repo
-      uses: actions/checkout@v4
-
-    - name: Login to dockerhub
-      uses: docker/login-action@v3
-      with:
-       username: ${{ secrets.DOCKERHUB_USERNAME }}
-       password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Build and push to dockerhub
-      uses: docker/build-push-action@v5
-      with:
-       context:
-       push: true
-       tags: kicsipixel/githubaction:latest
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/interface:latest
